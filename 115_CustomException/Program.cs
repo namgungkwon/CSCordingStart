@@ -1,0 +1,64 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _115_CustomException
+{
+
+    class MyException : ApplicationException
+    {
+        public int Num { get; set; }
+        public MyException() : base()
+        {
+
+        }
+        public MyException(int a)
+        {
+            Num = a;
+        }
+
+        public override string ToString()
+        {
+            return "Num: " + Num;
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string readStr = Console.ReadLine();
+            try
+            {
+                int num = int.Parse(readStr);
+
+                if (num == 0 || num == 10)
+                    throw new MyException(num);
+            }
+            catch (OverflowException e)
+            {
+                Console.WriteLine("OverflowException: " + e.Message);
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine("FormatException: " + e.Message);
+            }
+            catch (MyException e) when (e.Num == 0)
+            {
+                Console.WriteLine("when(e.Num == 0)");
+                Console.WriteLine("MyException: " + e.Num);
+                Console.WriteLine("MyException: " + e.StackTrace);
+            }
+            catch (MyException e) when (e.Num == 10)
+            {
+                Console.WriteLine("when(e.Num == 10)");
+                Console.WriteLine("MyException: " + e.Num);
+                Console.WriteLine("MyException: " + e.ToString());
+                Console.WriteLine("MyException: " + e.StackTrace);
+            }
+        }
+    }
+}
